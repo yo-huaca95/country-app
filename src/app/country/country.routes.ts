@@ -28,10 +28,6 @@ export const countryRoutes: Routes = [
             }
         ]
      },
-    // {
-    //   path:'**',
-    //   redirectTo:''
-    // }
 ];
 
 export default countryRoutes;
