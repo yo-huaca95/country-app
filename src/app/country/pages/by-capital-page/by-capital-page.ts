@@ -34,10 +34,10 @@ onSearch(query: string) {
        console.log(countries);
     },
     error:(err) =>{
+      console.log(err);
       this.isLoading.set(false);
       this.countries.set([]);
-      this.isError.set(`No se encontró un país con esa capital: ${query.length>0? query: 'Parametro de busqueda vacio'}`);
-      console.log(`No se encontró un país con esa capital: ${query}`);
+      this.isError.set(err);
     },
   }
   
