@@ -14,7 +14,32 @@ export class CountryService {
 
   searByCapital(query:string):Observable<Country[]>{
     query=query.toLowerCase();
-    return this.http.get<RESTCountry>(`${environment.countryUrl}`
+    //console.log(query);
+    return this.http.get<RESTCountry>(`${environment.countryUrl}/capitals`
+     ,{
+       params:{
+        q:query,
+        
+       },
+       headers:{
+        // 'Content-Type': 'application/json',
+        'Authorization': `Bearer ${environment.countryApiKey}`
+       }
+    }
+    )
+    .pipe(
+      map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
+      catchError(error=>{
+          //console.log('error Fetchig', error);
+          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Vacio'}`))
+      })
+    )
+  }
+
+  searByCountry(query:string):Observable<Country[]>{
+    query=query.toLowerCase();
+    //console.log(query);
+    return this.http.get<RESTCountry>(`${environment.countryUrl}/names.official`
      ,{
        params:{
         q:query,

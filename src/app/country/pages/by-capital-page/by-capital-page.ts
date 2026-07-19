@@ -18,11 +18,11 @@ export class ByCapitalPage {
   countryResources= resource({
     params: () => ({query: this.query()}),
     loader: async({params}) => { // {params,abortSignal,previous} destructuración
-      //if(!params.query) return [];
+      if(!params.query) return [];
       return await firstValueFrom( //firstValueFrom de rxjs convierte un observable en una promesa
         this.countryService.searByCapital(params.query) //observable a convertir
       )
-    },
+    }
   })
 
 
