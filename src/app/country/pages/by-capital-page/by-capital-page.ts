@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { SearchInput } from '../../components/search-input/search-input';
 import { CountryList } from "../../components/country-list/country-list";
-import { Country } from '../../services/country';
+import { CountryService } from '../../services/country.service';
 
 import { Object } from '../../interfaces/rest-countries.interface';
+import { Country } from '../../interfaces/country.interface';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -12,11 +13,11 @@ import { Object } from '../../interfaces/rest-countries.interface';
 })
 export class ByCapitalPage {
 
-  countryService= inject(Country);
+  countryService= inject(CountryService);
 
   isLoading= signal(false);
   isError=signal<string|null>(null);
-  countries= signal<Object[]>([]);
+  countries= signal<Country[]>([]);
 
 
 onSearch(query: string) {
@@ -25,10 +26,10 @@ onSearch(query: string) {
   this.isLoading.set(true);
   this.isError.set(null);
 
-  this.countryService.searByCapital(query).subscribe(REScountry=>{
+  this.countryService.searByCapital(query).subscribe(countries=>{
   this.isLoading.set(false);
-  this.countries.set(REScountry.data.objects);
-  console.log(REScountry.data.objects);
+  this.countries.set(countries);
+  console.log(countries);
  })
 }
 

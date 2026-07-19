@@ -19,24 +19,23 @@
          {{index+1}}
       </td>
        <td>
-         {{country.flag.emoji}}-🏴‍☠️
+         {{country.flag}}-🏴‍☠️
       </td>
       <td>
-         <img [src]="country.flag.url_svg" [alt]="country.names.common" class="w-10" >
+         <img [src]="country.flagSvg" [alt]="country.name" class="w-10" >
       </td>
          <td>
-         {{country.names.common}}
+         {{country.name}}
       </td>
       <td>
-         {{country.capitals[0].name}}
+         {{country.capital}}
       </td>
       <td>
          {{country.population}}
       </td>
       <td>
-         <a class="link-primary">Más información</a>
-      </td>
-      
+         <a class="link-primary cursor-pointer">Más información</a>
+      </td>    
    </tr>
    }
 </tbody>
