@@ -26,11 +26,22 @@ onSearch(query: string) {
   this.isLoading.set(true);
   this.isError.set(null);
 
-  this.countryService.searByCapital(query).subscribe(countries=>{
-  this.isLoading.set(false);
-  this.countries.set(countries);
-  console.log(countries);
- })
+  this.countryService.searByCapital(query).subscribe(
+  {
+    next:(countries)=> {
+       this.isLoading.set(false);
+       this.countries.set(countries);
+       console.log(countries);
+    },
+    error:(err) =>{
+      this.isLoading.set(false);
+      this.countries.set([]);
+      this.isError.set(`No se encontró un país con esa capital: ${query.length>0? query: 'Parametro de busqueda vacio'}`);
+      console.log(`No se encontró un país con esa capital: ${query}`);
+    },
+  }
+  
+  )
 }
 
 }
