@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
-import { map, Observable } from 'rxjs';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
 import { Country } from '../interfaces/country.interface';
 
@@ -26,6 +26,12 @@ export class CountryService {
        }
     }
     )
-    .pipe(map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray))
+    .pipe(
+      map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
+      catchError(error=>{
+          console.log('error Fetchig', error);
+          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Parametro de busqueda vacio'}`))
+      })
+    )
   }
 }
