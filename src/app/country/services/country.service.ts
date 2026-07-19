@@ -29,7 +29,7 @@ export class CountryService {
     .pipe(
       map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
       catchError(error=>{
-          console.log('error Fetchig', error);
+          //console.log('error Fetchig', error);
           return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Vacio'}`))
       })
     )
