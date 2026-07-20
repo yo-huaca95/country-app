@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, resource, signal } from '@angular/core';
 import { SearchInput } from "../../components/search-input/search-input";
 import { CountryList } from "../../components/country-list/country-list";
 import { CountryService } from '../../services/country.service';
-import { Country } from '../../interfaces/country.interface';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-by-region-page',
@@ -11,8 +11,15 @@ import { Country } from '../../interfaces/country.interface';
 })
 export class ByRegionPage {
   countryService= inject(CountryService);
+  query=signal('');
 
-  isLoading= signal(false);
-  isError=signal<string|null>(null);
-  countries= signal<Country[]>([]);
+   countryResources= resource({
+    params: () => ({query: this.query()}),
+    loader: async({params}) => { // {params,abortSignal,previous} destructuración
+      if(!params.query) return [];
+      return await firstValueFrom( //firstValueFrom de rxjs convierte un observable en una promesa
+        this.countryService.searByRegion(params.query) //observable a convertir
+      )
+    }
+  })
 }
