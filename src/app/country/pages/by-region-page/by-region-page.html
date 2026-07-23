@@ -2,8 +2,10 @@
 placeholder="Buscar por región"
 (value)="query.set($event)"
 />
-@if(countryResources.error()){
- <h3>{{countryResources.error()}}</h3>
-}@if(countryResources.hasValue()){
-<country-list [countries]="countryResources.value()!" />
-}
+
+<country-list 
+[countries]="countryResources.value()?? []"
+[errorMenssage]="countryResources.error()"
+[isEmpty]="countryResources.value()?.length==0"
+[isLoading]="countryResources.isLoading()"
+ />
