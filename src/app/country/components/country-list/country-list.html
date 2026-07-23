@@ -1,4 +1,4 @@
-<section class="mt-5">
+<section class="mt-5"><tr></tr>
    <h1>🇨🇴 🇦🇷 🇺🇸 🇦🇸</h1>
 <table class="table table-md mt-2 w-full">
  <thead>
@@ -37,11 +37,33 @@
       </td>
       <td>
          <a 
-         [routerLink]="['/country/by',country.uuid]"
+         [routerLink]="['/country/by',country.codesAlpha_3]"
          class="link-primary cursor-pointer">Más información</a>
       </td>    
    </tr>
    }
+
+  <!--  -->
+@if(errorMenssage() ){
+   <tr>
+      <td colspan="8" class="text-center">{{errorMenssage()}}</td>
+   </tr>
+}   
+
+  <!--  -->
+@if(countries().length==0 && !isLoading()){
+   <tr>
+      <td colspan="8" class="text-center">No se encontraron resultados</td>
+   </tr>
+}   
+
+  <!--  -->
+@if(isLoading()){
+   <tr>
+      <td colspan="8" class="text-center">Buscando Paises</td>
+   </tr>
+}   
+
 </tbody>
 </table>
 </section>
