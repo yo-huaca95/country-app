@@ -11,6 +11,7 @@ export class CountryMapper{
             name:item.names.translations['spa'].official?? 'No Spanish Name',
             capital:item.capitals?.[0]?.name?? 'N/A',
             population:item.population,
+            codesAlpha_3:item.codes.alpha_3
         }
     }
 
