@@ -5,6 +5,7 @@ import { RESTCountry } from '../interfaces/rest-countries.interface';
 import { catchError, delay, map, Observable, throwError } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
 import { Country } from '../interfaces/country.interface';
+import { CountryNotFoundError } from 'src/app/core/errors/country-not-found.error';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class CountryService {
   searByCapital(query:string):Observable<Country[]>{
     query=query.toLowerCase();
     //console.log(query);
-    return this.http.get<RESTCountry>(`${environment.countryUrl}/capitals`
+    return this.http.get<RESTCountry>(`${environment.countryUrl}/capitalssssss`
      ,{
        params:{
         q:query,
@@ -29,11 +30,7 @@ export class CountryService {
     )
     .pipe(
       map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
-      delay(3000),
-      catchError(error=>{
-          //console.log('error Fetchig', error);
-          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Vacio'}`))
-      })
+      delay(3000)
     )
   }
 
@@ -54,11 +51,7 @@ export class CountryService {
     )
     .pipe(
       map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
-      delay(3000),
-      catchError(error=>{
-          //console.log('error Fetchig', error);
-          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Vacio'}`))
-      })
+      delay(3000)
     )
   }
 
@@ -79,38 +72,33 @@ export class CountryService {
     )
     .pipe(
       map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
-      delay(3000),
-      catchError(error=>{
-          //console.log('error Fetchig', error);
-          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${query.length>0? query: 'Vacio'}`))
-      })
+      delay(3000)
     )
   }
 
   searByAlphaCode(code:string){
     code=code.toLowerCase();
     //console.log(query);
-    return this.http.get<RESTCountry>(`${environment.countryUrl}/codes.alpha_3`
-     ,{
-       params:{
-        q:code,
-        
-       },
-       headers:{
-        // 'Content-Type': 'application/json',
-        'Authorization': `Bearer ${environment.countryApiKey}`
-       }
-    }
-    )
-    .pipe(
-      map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
-      map(countries => countries.at(0)),
-      delay(3000),
-      catchError(error=>{
-          //console.log('error Fetchig', error);
-          return throwError(()=>new Error(`No se pudo obtener paises con ese query ${code.length>0? code: 'Vacio'}`))
+    return this.http
+      .get<RESTCountry>(`${environment.countryUrl}/codes.alpha_3`, {
+        params: {
+          q: code,
+        },
+        headers: {
+          // 'Content-Type': 'application/json',
+          Authorization: `Bearer ${environment.countryApiKey}`,
+        },
       })
-    )
+      .pipe(
+        map(CountryMapper.mapRestCoutriesObjectsArrayToCountriesArray),
+        map((countries) => {
+          if (countries.length === 0) {
+            throw new CountryNotFoundError();
+          }
+          return countries.at(0);
+        }),
+        delay(3000)
+      );
   }
 
 }
